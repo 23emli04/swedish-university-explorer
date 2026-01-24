@@ -13,6 +13,11 @@ import AboutUsPage from "../features/sports/pages/info/AboutUsPage.jsx";
 
 import formatLeaguePath from "../features/sports/components/formatLeaguePath.jsx";
 
+// Education pages
+import ProvidersPage from "../features/education/pages/ProvidersPage.jsx";
+import EventsPage from "../features/education/pages/EventsPage.jsx";
+import EducationInfoPage from "../features/education/pages/EducationInfoPage.jsx";
+
 function App() {
 
     const currentYear = new Date().getFullYear();
@@ -54,6 +59,13 @@ function App() {
                         {generateLeaguePageRoutes()}
                         <Route path="/team/:id" element={<TeamPage/>}/>
                         <Route path="/about-us" element={<AboutUsPage/>}/>
+                        
+                        {/* Education routes */}
+                        <Route path="/education" element={<ProvidersPage/>}/>
+                        <Route path="/education/providers" element={<ProvidersPage/>}/>
+                        <Route path="/education/events" element={<EventsPage/>}/>
+                        <Route path="/education/info" element={<EducationInfoPage/>}/>
+                        
                         <Route path="*" element={<NotFoundPage/>}/>
                     </Routes>
                 </main>

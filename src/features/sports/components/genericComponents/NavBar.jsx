@@ -113,6 +113,17 @@
                                     isMobile
                                 />
                             ))}
+                            {/* Education mobile links */}
+                            <li>
+                                <details>
+                                    <summary className="cursor-pointer">Utbildning</summary>
+                                    <ul className="p-2 w-full text-md">
+                                        <li><Link to="/education/providers" className="block px-2 py-1">Lärosäten</Link></li>
+                                        <li><Link to="/education/events" className="block px-2 py-1">Utbildningar</Link></li>
+                                        <li><Link to="/education/info" className="block px-2 py-1">Utbildningsinfo</Link></li>
+                                    </ul>
+                                </details>
+                            </li>
                             <li className="text-md font-semibold">
                                 <button onClick={() => document.getElementById("searchModal").showModal()}>
                                     Sök på lag/ligor
@@ -132,6 +143,39 @@
                                 error={errors[item.leagueKey]}
                             />
                         ))}
+                        {/* Education dropdown */}
+                        <li className="center">
+                            <details open={openDropdown === 'education'} onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setOpenDropdown(openDropdown === 'education' ? null : 'education');
+                            }}>
+                                <summary className="cursor-pointer container items-center gap-4 justify-items-start">
+                                    Utbildning
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="inline-block w-6 h-6 ml-2 stroke-current" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z" />
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                                    </svg>
+                                </summary>
+                                <ul className="p-2 absolute bg-base-100 text-md rounded shadow-md z-20 mt-1">
+                                    <li>
+                                        <Link to="/education/providers" onClick={() => setOpenDropdown(null)} className="block px-2 py-1 hover:bg-base-200 rounded text-md">
+                                            Lärosäten
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/education/events" onClick={() => setOpenDropdown(null)} className="block px-2 py-1 hover:bg-base-200 rounded text-md">
+                                            Utbildningar
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/education/info" onClick={() => setOpenDropdown(null)} className="block px-2 py-1 hover:bg-base-200 rounded text-md">
+                                            Utbildningsinfo
+                                        </Link>
+                                    </li>
+                                </ul>
+                            </details>
+                        </li>
                     </ul>
                 </div>
 
