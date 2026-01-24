@@ -9,6 +9,7 @@ export default defineConfig({
         react(),
     ],
     server: {
+        port: 8080,
         proxy: {
             "/api": {
                 target: "https://api.everysport.com",
