@@ -25,7 +25,7 @@ export default function EventsPage() {
 
   const searchQuery = useEventSearch(search, { page, size });
 
-  const { data, loading, error, refetch } = isSearching ? searchQuery : eventsQuery;
+  const { data, loading, error} = isSearching ? searchQuery : eventsQuery;
 
   const handleRefetch = () => {
     if (!isSearching && eventsQuery.refetch) {
