@@ -54,25 +54,50 @@ export function useEducationProvider(providerId) {
   return { data, loading, error };
 }
 export function useEducationByProvider(providerId) {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [page, setPage] = useState(0);
+  const [hasMore, setMore] = useState(true);
 
+  // Reset everything if the providerId changes
   useEffect(() => {
-    if (!providerId) return;
-
-    setLoading(true);
-    setError(null);
-
-    EducationEventApiApi
-        .getByProvider(providerId)
-        .then(setData)
-        .catch(setError)
-        .finally(() => setLoading(false));
+    setData([]);
+    setPage(0);
+    setMore(true);
   }, [providerId]);
 
-  return { data, loading, error };
-}
+  useEffect(() => {
+    if (!providerId || !hasMore) return;
 
+    setLoading(true);
+
+    // Assuming your API client supports passing page/size:
+    // .getByProvider(id, page, size)
+    EducationEventApiApi
+        .getByProvider(providerId, page, 20)
+        .then((response) => {
+          const newItems = response?.content || [];
+
+          // Append data: keep old items, add new ones
+          setData(prev => [...prev, ...newItems]);
+
+          // Check if we reached the end (based on Spring Pageable properties)
+          setMore(!response.last);
+        })
+        .catch((err) => {
+          setError(err.message);
+        })
+        .finally(() => setLoading(false));
+  }, [providerId, page]); // Triggers when provider changes OR page changes
+
+  const loadMore = () => {
+    if (!loading && hasMore) {
+      setPage(prev => prev + 1);
+    }
+  };
+
+  return { data, loading, error, hasMore, loadMore };
+}
 
 
