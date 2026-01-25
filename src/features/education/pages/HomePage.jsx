@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { useEducationEvents, useEventSearch } from '../hooks/useEducationEvents';
 import EventCard from '../components/EventCard';
 import EventDetailDialog from '../components/EventDetailDialog';
-import LoadingSkeleton from '../components/LoadingSkeleton';
-import ErrorAlert from '../components/ErrorAlert';
+import LoadingSkeleton from '../components/ui/LoadingSkeleton';
+import ErrorAlert from '../components/ui/ErrorAlert';
 import Pagination from '../components/Pagination';
-import EndpointConfigDialog from '../components/EndpointConfigDialog';
+import EndpointConfigDialog from '../components/ui/EndpointConfigDialog';
 
 export default function HomePage() {
     const [page, setPage] = useState(0);

@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEducationProvider } from '../hooks/useEducationProviders';
-import LoadingSkeleton from '../components/LoadingSkeleton';
-import ErrorAlert from '../components/ErrorAlert';
+import LoadingSkeleton from '../components/ui/LoadingSkeleton';
+import ErrorAlert from '../components/ui/ErrorAlert';
 import ProviderDetails from '../components/ProviderDetails';
 
 export default function ProviderSpecificPage() {

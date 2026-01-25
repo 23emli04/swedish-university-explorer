@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { getApiBaseUrl, setApiBaseUrl } from '../../../lib/educationApi';
+import { getApiBaseUrl, setApiBaseUrl } from '../../../../lib/educationApi';
 
 export default function EndpointConfigDialog({ onSave }) {
   const [isOpen, setIsOpen] = useState(false);

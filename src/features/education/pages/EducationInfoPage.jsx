@@ -1,112 +1,85 @@
-import { useState, useMemo } from 'react';
-import { useEducationInfos } from '../hooks/useEducationInfo';
-import LoadingSkeleton from '../components/LoadingSkeleton';
-import ErrorAlert from '../components/ErrorAlert';
-import EndpointConfigDialog from '../components/EndpointConfigDialog';
+import { useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { BookOpen, GraduationCap, MapPin, Clock, ExternalLink, Loader2 } from 'lucide-react';
 
 export default function EducationInfoPage() {
-  const { data, loading, error, refetch } = useEducationInfos();
-  const [search, setSearch] = useState('');
-  const [selectedInfo, setSelectedInfo] = useState(null);
+  const { id } = useParams(); // This matches the ":id" in your Route
+  const [education, setEducation] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const filtered = useMemo(() => {
-    if (!search) return data;
-    const q = search.toLowerCase();
-    return data.filter((item) =>
-      item.identifier?.toLowerCase().includes(q) ||
-      item.titleSwe?.toLowerCase().includes(q) ||
-      item.titleEng?.toLowerCase().includes(q)
-    );
-  }, [data, search]);
+  useEffect(() => {
+    // Replace with your actual API call (e.g., EducationInfoApi.getById)
+    setLoading(true);
+    fetch(`/api/education-info/${id}`)
+        .then(res => {
+          if (!res.ok) throw new Error("Kunde inte hitta utbildningen");
+          return res.json();
+        })
+        .then(data => setEducation(data))
+        .catch(err => setError(err.message))
+        .finally(() => setLoading(false));
+  }, [id]);
+
+  if (loading) return <div className="flex justify-center p-20"><Loader2 className="animate-spin" /></div>;
+  if (error) return <div className="alert alert-error">{error}</div>;
+  if (!education) return <div>Ingen information tillgänglig.</div>;
 
   return (
-    <div className="container mx-auto max-w-6xl px-4 py-6">
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-        <h1 className="text-3xl font-bold">Utbildningsinformation</h1>
-        <EndpointConfigDialog onSave={refetch} />
-      </div>
-
-      <div className="flex flex-wrap gap-3 mb-6">
-        <input
-          type="text"
-          placeholder="Sök..."
-          className="input input-bordered flex-1 min-w-[200px]"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <button className="btn btn-ghost" onClick={refetch} title="Ladda om">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-          </svg>
-        </button>
-      </div>
-
-      {loading && <LoadingSkeleton rows={8} />}
-      {error && <ErrorAlert error={error} onRetry={refetch} />}
-
-      {!loading && !error && (
-        <>
-          <p className="text-base-content/60 mb-4">{filtered.length} poster</p>
-          <div className="overflow-x-auto">
-            <table className="table table-zebra w-full">
-              <thead>
-                <tr>
-                  <th>Identifierare</th>
-                  <th>Titel (SV)</th>
-                  <th>Titel (EN)</th>
-                  <th>HP</th>
-                  <th>Nivå</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.map((info) => (
-                  <tr
-                    key={info.identifier || info.id}
-                    className="hover cursor-pointer"
-                    onClick={() => setSelectedInfo(info)}
-                  >
-                    <td className="font-mono text-sm">{info.identifier || '-'}</td>
-                    <td>{info.titleSwe || '-'}</td>
-                    <td>{info.titleEng || '-'}</td>
-                    <td>{info.credits ?? '-'}</td>
-                    <td>{info.educationLevelCode || '-'}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+      <div className="max-w-4xl mx-auto p-6 space-y-8">
+        <header className="space-y-4">
+          <div className="text-sm breadcrumbs opacity-50">
+            <ul>
+              <li>Utbildningar</li>
+              <li>{education.formType || 'Yrkeshögskola'}</li>
+              <li>{education.titleSwedish}</li>
+            </ul>
           </div>
-          {filtered.length === 0 && (
-            <div className="text-center py-12 text-base-content/60">
-              Ingen data hittades
-            </div>
-          )}
-        </>
-      )}
+          <h1 className="text-4xl font-black">{education.titleSwedish}</h1>
+          <p className="text-xl opacity-70 italic">{education.titleEnglish}</p>
+        </header>
 
-      {selectedInfo && (
-        <dialog open className="modal modal-open">
-          <div className="modal-box max-w-2xl">
-            <button
-              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-              onClick={() => setSelectedInfo(null)}
-            >
-              ✕
-            </button>
-            <h2 className="text-xl font-bold mb-4">
-              {selectedInfo.titleSwe || selectedInfo.identifier}
-            </h2>
-            <pre className="bg-base-200 p-4 rounded-lg overflow-x-auto text-sm">
-              {JSON.stringify(selectedInfo, null, 2)}
-            </pre>
-            <div className="modal-action">
-              <button className="btn" onClick={() => setSelectedInfo(null)}>Stäng</button>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Stats Cards */}
+          <div className="stats stats-vertical shadow border border-base-200">
+            <div className="stat">
+              <div className="stat-figure text-primary"><Clock size={24}/></div>
+              <div className="stat-title">Omfattning</div>
+              <div className="stat-value text-2xl">{education.credits} hp</div>
+            </div>
+            <div className="stat">
+              <div className="stat-figure text-secondary"><GraduationCap size={24}/></div>
+              <div className="stat-title">Nivå</div>
+              <div className="stat-value text-lg leading-tight">{education.degree || 'Examen'}</div>
             </div>
           </div>
-          <form method="dialog" className="modal-backdrop">
-            <button onClick={() => setSelectedInfo(null)}>close</button>
-          </form>
-        </dialog>
-      )}
-    </div>
+
+          {/* Description Area */}
+          <div className="md:col-span-2 space-y-6">
+            <section className="prose lg:prose-xl">
+              <h2 className="text-2xl font-bold">Beskrivning</h2>
+              <p>{education.descriptionSwedish || "Beskrivning saknas."}</p>
+            </section>
+
+            {education.subjectCode && (
+                <div className="badge badge-outline gap-2">
+                  Ämneskod: {education.subjectCode}
+                </div>
+            )}
+          </div>
+        </div>
+
+        {/* If you want to show available start dates (events) on this page too */}
+        <div className="bg-base-200 p-8 rounded-3xl">
+          <h3 className="text-xl font-bold mb-4">Om utbildningen</h3>
+          <p className="opacity-70 mb-6">
+            Denna utbildning ges i formen <strong>{education.formType}</strong> och leder till en <strong>{education.degree}</strong>.
+          </p>
+          {/* Add a button back to the provider list or an external link */}
+          <button className="btn btn-primary gap-2" onClick={() => window.history.back()}>
+            Gå tillbaka
+          </button>
+        </div>
+      </div>
   );
 }

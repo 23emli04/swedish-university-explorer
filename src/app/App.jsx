@@ -21,7 +21,7 @@ function App() {
                         <Route path="/education" element={<ProvidersPage/>}/>
                         <Route path="/education/providers/:id" element={<ProviderSpecificPage/>}/>
                         <Route path="/education/events" element={<EventsPage/>}/>
-                        <Route path="/education/info" element={<EducationInfoPage/>}/>
+                        <Route path="/education/providers/education/:id" element={<EducationInfoPage/>}/>
                     </Routes>
                 </main>
 

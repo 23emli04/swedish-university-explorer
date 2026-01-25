@@ -2,9 +2,9 @@ import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useEducationProviders } from '../hooks/useEducationProviders';
 import ProviderCard from '../components/ProviderCard';
-import LoadingSkeleton from '../components/LoadingSkeleton';
-import ErrorAlert from '../components/ErrorAlert';
-import EndpointConfigDialog from '../components/EndpointConfigDialog';
+import LoadingSkeleton from '../components/ui/LoadingSkeleton';
+import ErrorAlert from '../components/ui/ErrorAlert';
+import EndpointConfigDialog from '../components/ui/EndpointConfigDialog';
 import { Search, Filter, RotateCcw, Building } from 'lucide-react';
 
 export default function ProvidersPage() {
