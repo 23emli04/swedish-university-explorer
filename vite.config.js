@@ -9,15 +9,8 @@ export default defineConfig({
         react(),
     ],
     server: {
-        port: 8080,
-        proxy: {
-            "/api": {
-                target: "https://api.everysport.com",
-                changeOrigin: true,
-                secure: true,
-                rewrite: (p) =>
-                    p.startsWith("/api") ? "/v1" + p.slice(4) : p,
-            },
-        },
-    },
+        port: 8081,  // or any port you prefer: 3000, 5173, 5174, etc.
+        host: true   // optional: allows access from network
+    }
+
 });
