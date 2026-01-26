@@ -9,8 +9,7 @@ export default defineConfig({
         react(),
     ],
     server: {
-        port: 8081,  // or any port you prefer: 3000, 5173, 5174, etc.
-        host: true   // optional: allows access from network
-    }
-
+        port: 8080,
+        host: true,
+    },
 });
