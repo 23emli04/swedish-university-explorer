@@ -28,7 +28,6 @@ async function fetchJson(url, options = {}) {
     return res.json();
 }
 
-// ─── Education Providers ───
 export const EducationProviderApi = {
     getAll: () =>
         fetchJson(`${getApiBaseUrl()}/api/educationProvider`),
@@ -39,7 +38,6 @@ export const EducationProviderApi = {
         ),
 };
 
-// ─── Education Events (paged) ───
 export const EducationEventApi = {
     getAll: ({
                  page = 0,
@@ -86,14 +84,9 @@ export const EducationEventApi = {
         fetchJson(
             `${getApiBaseUrl()}/api/education-events/${encodeURIComponent(identifier)}`
         ),
-
-    triggerSync: () =>
-        fetchJson(`${getApiBaseUrl()}/api/education-events/sync`, {
-            method: 'POST',
-        }),
 };
 
-// ─── Education Info ───
+
 export const EducationInfoApi = {
     getAll: () =>
         fetchJson(`${getApiBaseUrl()}/api/v1/education-info`),
@@ -109,4 +102,18 @@ export const EducationInfoApi = {
         fetchJson(`${getApiBaseUrl()}/api/v1/education-info/fetch`, {
             method: 'POST',
         }),
+};
+
+export const EducationApi = {
+    getEducations: ({ page = 0, size = 20, sortBy = 'id', sortDirection = 'DESC' } = {}) =>
+        fetchJson(
+            `${getApiBaseUrl()}/api/educations?page=${page}&size=${size}&sort=${sortBy},${sortDirection}`
+        ),
+
+    search: (query, { page = 0, size = 20 } = {}) =>
+        fetchJson(
+            `${getApiBaseUrl()}/api/educations/search?query=${encodeURIComponent(
+                query
+            )}&page=${page}&size=${size}`
+        ),
 };

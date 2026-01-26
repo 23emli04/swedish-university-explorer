@@ -1,90 +1,83 @@
+import React from 'react';
+
 export default function EventDetailDialog({ event, onClose }) {
   if (!event) return null;
 
-  const formatDate = (dateStr) => {
-    if (!dateStr) return '-';
-    try {
-      return new Date(dateStr).toLocaleDateString('sv-SE', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      });
-    } catch {
-      return dateStr;
-    }
-  };
+  const data = event.fullData || {};
+  const edu = data.education || {};
 
-  const fields = [
-    { label: 'Identifierare', value: event.identifier },
-    { label: 'Svensk titel', value: event.titleSwe },
-    { label: 'Engelsk titel', value: event.titleEng },
-    { label: 'Högskolepoäng', value: event.credits ? `${event.credits} hp` : null },
-    { label: 'Nivå', value: event.educationLevelCode },
-    { label: 'Studietakt', value: event.studyPace ? `${event.studyPace}%` : null },
-    { label: 'Start', value: formatDate(event.executionStart) },
-    { label: 'Slut', value: formatDate(event.executionEnd) },
-    { label: 'Ansökningsfrist', value: formatDate(event.applicationDeadline) },
-    { label: 'Plats', value: event.location },
-    { label: 'Studieform', value: event.studyForm },
-    { label: 'Lärosäte', value: event.educationProviderName },
-  ];
+  // Helpers to grab Swedish content
+  const description = edu.description?.find(d => d.lang === 'swe')?.content || "";
+  const eligibility = edu.eligibility?.eligibilityDescription?.[0]?.find(e => e.lang === 'swe')?.content || "";
+  const credits = edu.credits?.credits || 0;
+  const level = edu.educationLevel?.code === 'grund' ? 'Grundnivå' : edu.educationLevel?.code;
+
+  // Tags from text_enrichments
+  const occupations = data.text_enrichments_results?.enriched_candidates?.occupations || [];
+  const skills = data.text_enrichments_results?.enriched_candidates?.competencies || [];
 
   return (
-    <dialog open className="modal modal-open">
-      <div className="modal-box max-w-2xl max-h-[80vh] overflow-y-auto">
-        <button
-          className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-          onClick={onClose}
-        >
-          ✕
-        </button>
+      <div className="modal modal-open">
+        <div className="modal-box max-w-4xl bg-base-100 shadow-2xl">
+          <button onClick={onClose} className="btn btn-sm btn-circle absolute right-2 top-2">✕</button>
 
-        <h2 className="text-xl font-bold mb-4 pr-8">
-          {event.titleSwe || event.titleEng || 'Kursdetaljer'}
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-          {fields.map(({ label, value }) =>
-            value ? (
-              <div key={label}>
-                <span className="font-semibold">{label}:</span>
-                <p className="text-base-content/70">{value}</p>
+          <div className="flex flex-col gap-6">
+            {/* Header */}
+            <header>
+              <div className="flex items-center gap-2 mb-2">
+                <span className="badge badge-primary">{credits} HP</span>
+                <span className="badge badge-outline">{level}</span>
               </div>
-            ) : null
-          )}
-        </div>
+              <h2 className="text-3xl font-extrabold">{event.title}</h2>
+              <p className="text-lg text-primary font-medium mt-1">
+                {data.providerSummary?.providers?.join(", ")}
+              </p>
+            </header>
 
-        {event.description && (
-          <div className="mt-4">
-            <span className="font-semibold">Beskrivning:</span>
-            <p className="text-base-content/70 mt-1 whitespace-pre-wrap">
-              {event.description}
-            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Main Content */}
+              <div className="md:col-span-2 space-y-6">
+                <section>
+                  <h3 className="text-lg font-bold border-b pb-2 mb-3">Om utbildningen</h3>
+                  <p className="text-base-content/80 leading-relaxed whitespace-pre-line">
+                    {description}
+                  </p>
+                </section>
+
+                {eligibility && (
+                    <section className="bg-base-200 p-4 rounded-xl">
+                      <h3 className="text-md font-bold mb-2">Behörighet</h3>
+                      <p className="text-sm italic">{eligibility}</p>
+                    </section>
+                )}
+              </div>
+
+              {/* Sidebar / Tags */}
+              <div className="space-y-6">
+                <section>
+                  <h3 className="text-sm font-bold uppercase tracking-widest text-base-content/50 mb-3">Yrkesroller</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {occupations.map((job, i) => (
+                        <span key={i} className="badge badge-secondary badge-outline">{job}</span>
+                    ))}
+                  </div>
+                </section>
+
+                <section>
+                  <h3 className="text-sm font-bold uppercase tracking-widest text-base-content/50 mb-3">Kompetenser</h3>
+                  <div className="flex flex-wrap gap-1">
+                    {skills.map((skill, i) => (
+                        <span key={i} className="text-[10px] bg-base-300 px-2 py-1 rounded text-base-content/70">
+                      {skill}
+                    </span>
+                    ))}
+                  </div>
+                </section>
+              </div>
+            </div>
           </div>
-        )}
-
-        {event.url && (
-          <div className="mt-4">
-            <a
-              href={event.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-outline btn-sm"
-            >
-              Öppna på lärosätets webbplats
-            </a>
-          </div>
-        )}
-
-        <div className="modal-action">
-          <button className="btn btn-primary" onClick={onClose}>
-            Stäng
-          </button>
         </div>
+        <div className="modal-backdrop" onClick={onClose}>Close</div>
       </div>
-      <form method="dialog" className="modal-backdrop">
-        <button onClick={onClose}>close</button>
-      </form>
-    </dialog>
   );
 }

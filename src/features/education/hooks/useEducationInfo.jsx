@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { EducationInfoApi } from '../../../lib/educationApi';
+import {EducationApi, EducationInfoApi} from '../../../lib/educationApi';
 
 export function useEducationInfos() {
   const [data, setData] = useState([]);
@@ -47,4 +47,5 @@ export function useEducationInfoByIdentifier(identifier) {
   }, [identifier]);
 
   return { data, loading, error };
+
 }

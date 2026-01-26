@@ -1,6 +1,5 @@
 import { MapPin, Mail, Phone, Globe, Building2, Calendar, BookOpen } from 'lucide-react';
-// Added BookOpen here ⬆️
-import ProviderCourseBrowser from './ProviderCourseBrowser'; // Import the browser here
+import ProviderCourseBrowser from './ProviderCourseBrowser';
 
 export default function ProviderDetails({ data, onBack }) {
     return (

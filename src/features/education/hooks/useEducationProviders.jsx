@@ -59,20 +59,18 @@ export function useEducationByProvider(providerId, page = 0) {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        // Prevent fetching if no providerId
         if (!providerId) {
             setData({content: [], totalPages: 0});
             return;
         }
 
-        let isMounted = true; // Prevents updating state on unmounted component
+        let isMounted = true;
         setLoading(true);
 
         EducationEventApiApi
             .getByProvider(providerId, {page, size: 20})
             .then((response) => {
                 if (isMounted) {
-                    // response is the JSON you showed me
                     setData(response);
                     setError(null);
                 }
@@ -87,7 +85,7 @@ export function useEducationByProvider(providerId, page = 0) {
         return () => {
             isMounted = false;
         };
-    }, [providerId, page]); // ONLY fire when these change
+    }, [providerId, page]);
 
     return {
         courses: data.content || [],

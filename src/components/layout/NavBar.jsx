@@ -13,75 +13,77 @@ export default function NavBar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const isActive = (path) => {
-    if (path === '/') return location.pathname === '/';
-    return location.pathname.startsWith(path);
+    if (path === '/') {
+      return location.pathname === '/';
+    }
+
+    return location.pathname === path;
   };
 
+
   return (
-    <header className="sticky top-0 z-50 bg-base-100/95 backdrop-blur-md border-b border-base-300">
       <nav className="container mx-auto max-w-6xl px-4">
-        <div className="flex items-center justify-between h-16">
-          {/* Brand */}
-          <Link to="/" className="flex items-center gap-2 font-bold text-xl hover:opacity-80 transition-opacity">
-            <div className="bg-primary text-primary-content p-2 rounded-lg">
-              <GraduationCap size={24} />
-            </div>
-            <span className="hidden sm:inline">EduPortal</span>
-          </Link>
+        <div className="navbar bg-base-100 shadow-sm">
+          {/* Left */}
+          <div className="navbar-start">
+            <button
+                className="btn btn-ghost lg:hidden"
+                onClick={() => setMobileOpen((v) => !v)}
+            >
+              {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
 
-          {/* Desktop Nav */}
-          <ul className="hidden md:flex items-center gap-1">
-            {navLinks.map(({ to, label, icon: Icon }) => (
-              <li key={to}>
-                <Link
-                  to={to}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
-                    isActive(to)
-                      ? 'bg-primary text-primary-content'
-                      : 'hover:bg-base-200 text-base-content/80 hover:text-base-content'
-                  }`}
-                >
-                  <Icon size={18} />
-                  {label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+            <Link to="/" className="btn btn-ghost text-xl">
+              EduPortal
+            </Link>
+          </div>
 
-          {/* Mobile Toggle */}
-          <button
-            className="md:hidden btn btn-ghost btn-square"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle menu"
-          >
-            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
-
-        {/* Mobile Menu */}
-        {mobileOpen && (
-          <div className="md:hidden pb-4 border-t border-base-300 mt-2 pt-4">
-            <ul className="flex flex-col gap-2">
+          {/* Desktop nav */}
+          <div className="navbar-center hidden lg:flex">
+            <ul className="menu menu-horizontal gap-1">
               {navLinks.map(({ to, label, icon: Icon }) => (
-                <li key={to}>
-                  <Link
-                    to={to}
-                    onClick={() => setMobileOpen(false)}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${
-                      isActive(to)
-                        ? 'bg-primary text-primary-content'
-                        : 'hover:bg-base-200 text-base-content/80'
-                    }`}
-                  >
-                    <Icon size={20} />
-                    {label}
-                  </Link>
-                </li>
+                  <li key={to}>
+                    <Link
+                        to={to}
+                        className={isActive(to) ? 'active bg-blue-400' : ''}
+                    >
+                      <Icon size={16} />
+                      {label}
+                    </Link>
+                  </li>
               ))}
             </ul>
           </div>
+
+          {/* Right */}
+          <div className="navbar-end">
+            <input
+                type="text"
+                placeholder="Sök"
+                className="input input-bordered w-24 md:w-auto"
+            />
+          </div>
+        </div>
+
+        {/* Mobile menu */}
+        {mobileOpen && (
+            <div className="lg:hidden bg-base-100 shadow rounded-box mt-2">
+              <ul className="menu p-2">
+                {navLinks.map(({ to, label, icon: Icon }) => (
+                    <li key={to}>
+                      <Link
+                          to={to}
+                          onClick={() => setMobileOpen(false)}
+                          className={isActive(to) ? 'active font-semibold' : ''}
+                      >
+                        <Icon size={16} />
+                        {label}
+                      </Link>
+                    </li>
+                ))}
+              </ul>
+            </div>
         )}
       </nav>
-    </header>
   );
 }
