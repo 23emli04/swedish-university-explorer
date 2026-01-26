@@ -107,13 +107,13 @@ export const EducationInfoApi = {
 export const EducationApi = {
     getEducations: ({ page = 0, size = 20, sortBy = 'id', sortDirection = 'DESC' } = {}) =>
         fetchJson(
+            // Spring Data JPA expects "sort=propertyName,direction"
             `${getApiBaseUrl()}/api/educations?page=${page}&size=${size}&sort=${sortBy},${sortDirection}`
         ),
 
     search: (query, { page = 0, size = 20 } = {}) =>
         fetchJson(
-            `${getApiBaseUrl()}/api/educations/search?query=${encodeURIComponent(
-                query
-            )}&page=${page}&size=${size}`
+            // This builds: /api/educations/search?query=...&page=...&size=...
+            `${getApiBaseUrl()}/api/educations/search?query=${encodeURIComponent(query)}&page=${page}&size=${size}`
         ),
 };
