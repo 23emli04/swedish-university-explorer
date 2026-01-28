@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { GraduationCap, Github, Mail, ExternalLink } from 'lucide-react';
+import { Github, Mail, ExternalLink } from 'lucide-react';
+import logo from '@/assets/logo.svg';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -10,11 +11,8 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Brand Section */}
           <div className="space-y-4">
-            <Link to="/" className="flex items-center gap-2 font-bold text-xl">
-              <div className="bg-primary text-primary-content p-2 rounded-lg">
-                <GraduationCap size={20} />
-              </div>
-              <span>EduPortal</span>
+            <Link to="/" className="inline-block">
+              <img src={logo} alt="Logo" className="h-12 w-auto" />
             </Link>
             <p className="text-base-content/60 text-sm leading-relaxed">
               En katalog över svenska lärosäten och utbildningar. 

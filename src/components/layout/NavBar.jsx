@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { GraduationCap, BookOpen, Calendar, Menu, X } from 'lucide-react';
 import { useState } from 'react';
+import logo from '@/assets/logo.svg';
 
 const navLinks = [
   { to: '/', label: 'Hem', icon: BookOpen },
@@ -33,8 +34,8 @@ export default function NavBar() {
               {mobileOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
 
-            <Link to="/" className="btn btn-ghost text-xl">
-              EduPortal
+            <Link to="/" className="btn btn-ghost h-auto py-1">
+              <img src={logo} alt="Logo" className="h-10 w-auto" />
             </Link>
           </div>
 
