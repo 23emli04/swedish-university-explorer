@@ -24,7 +24,7 @@ export default function HomePage() {
         sortBy: 'lastSynced', // Changed from executionStart as Education entity uses lastSynced
         sortDirection,
     });
-    console.log(listQuery);
+    
 
     // Pattern: Search List
     const searchQuery = useEducationSearch(search, { page, size });

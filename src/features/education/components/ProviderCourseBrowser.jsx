@@ -9,7 +9,6 @@ export default function ProviderCourseBrowser({ providerId }) {
 
     // Backend handles filtering, so 'courses' only contains valid items
     const { courses = [], totalPages, loading, error } = useEducationByProvider(providerId, currentPage);
-    console.log(courses);
     useEffect(() => {
         setCurrentPage(0);
     }, [providerId]);

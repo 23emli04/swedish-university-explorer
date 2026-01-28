@@ -1,10 +1,5 @@
-import {useState, useEffect, useCallback} from 'react';
-import {
-    EducationEventApi as EducationEventApiApi,
-    EducationEventApi,
-    EducationProviderApi
-} from '../../../lib/educationApi';
-
+import { useState, useEffect, useCallback } from 'react';
+import { EducationEventApi, EducationProviderApi } from '../../../lib/educationApi';
 export function useEducationProviders() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -67,8 +62,8 @@ export function useEducationByProvider(providerId, page = 0) {
         let isMounted = true;
         setLoading(true);
 
-        EducationEventApiApi
-            .getByProvider(providerId, {page, size: 20})
+        EducationEventApi
+            .getByProvider(providerId, { page, size: 20 })
             .then((response) => {
                 if (isMounted) {
                     setData(response);

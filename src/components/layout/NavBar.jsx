@@ -45,7 +45,7 @@ export default function NavBar() {
                   <li key={to}>
                     <Link
                         to={to}
-                        className={isActive(to) ? 'active bg-blue-400' : ''}
+                        className={isActive(to) ? 'active bg-primary text-primary-content' : ''}
                     >
                       <Icon size={16} />
                       {label}

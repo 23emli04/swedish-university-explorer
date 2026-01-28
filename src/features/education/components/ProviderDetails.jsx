@@ -40,7 +40,7 @@ export default function ProviderDetails({ data, onBack }) {
                     {/* Contact Section */}
                     <section className="card bg-base-200 shadow-sm">
                         <div className="card-body">
-                            <h2 className="card-title text-2xl mb-4 text-blue-950">Kontaktuppgifter</h2>
+                            <h2 className="card-title text-2xl mb-4">Kontaktuppgifter</h2>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 <div className="space-y-4">
                                     <ContactItem icon={<Mail />} label="E-post" value={data.email} isLink linkType="mailto" />
